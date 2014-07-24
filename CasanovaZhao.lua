@@ -10,7 +10,7 @@
    (_/\_)(____)(_)\_)  (____)(_) (_)(__)(__)(_____)
 
 
--- XinZhao
+-- CasanovaZhao, enjoy
 
 if myHero.charName ~= "XinZhao" then return end
 
