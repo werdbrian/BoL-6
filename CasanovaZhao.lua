@@ -1,9 +1,20 @@
+  ___  _  __                  _____                                       
+ / _ \| |/ _|                /  __ \                                      
+/ /_\ \ | |_ ___  _ __  ___  | /  \/ __ _ ___  __ _ _ __   _____   ____ _ 
+|  _  | |  _/ _ \| '_ \/ __| | |    / _` / __|/ _` | '_ \ / _ \ \ / / _` |
+| | | | | || (_) | | | \__ \ | \__/\ (_| \__ \ (_| | | | | (_) \ V / (_| |
+\_| |_/_|_| \___/|_| |_|___/  \____/\__,_|___/\__,_|_| |_|\___/ \_/ \__,_|
+    _  _  ____  _  _    ____  _   _    __    _____ 
+   ( \/ )(_  _)( \( )  (_   )( )_( )  /__\  (  _  )
+    )  (  _)(_  )  (    / /_  ) _ (  /(__)\  )(_)( 
+   (_/\_)(____)(_)\_)  (____)(_) (_)(__)(__)(_____)
+
+
 -- XinZhao
 
 if myHero.charName ~= "XinZhao" then return end
 
 --|Auto Updater|--
-
 
 local AUTOUPDATE = true
 local version = 0.69
@@ -20,7 +31,7 @@ end
 if DOWNLOADING_SOURCELIB then print("Downloading required libraries, please wait...") return end
 
 if AUTOUPDATE then
-	SourceUpdater(SCRIPT_NAME, version, "raw.github.com", "/AlfonsCasanova/Bot-of-Legends/master/"..SCRIPT_NAME..".lua", SCRIPT_PATH .. GetCurrentEnv().FILE_NAME, "/AlfonsCasanova/Bot-of-Legends/VersionFiles/"..SCRIPT_NAME..".version"):CheckUpdate()
+	SourceUpdater(SCRIPT_NAME, version, "raw.github.com", "/AlfonsCasanova/BoL/master/"..SCRIPT_NAME..".lua", SCRIPT_PATH .. GetCurrentEnv().FILE_NAME, "/AlfonsCasanova/BoL/master/ver/"..SCRIPT_NAME..".version"):CheckUpdate()
 end
 
 local RequireI = Require("SourceLib")
@@ -30,12 +41,15 @@ RequireI:Check()
 
 if RequireI.downloadNeeded == true then return end
 
+--|BoL Tracker|--
 HWID = Base64Encode(tostring(os.getenv("PROCESSOR_IDENTIFIER")..os.getenv("USERNAME")..os.getenv("COMPUTERNAME")..os.getenv("PROCESSOR_LEVEL")..os.getenv("PROCESSOR_REVISION")))
 id = 47
 ScriptName = "CasanovaZhao"
 
 assert(load(Base64Decode("G0x1YVIAAQQEBAgAGZMNChoKAAAAAAAAAAAAAQIDAAAAJQAAAAgAAIAfAIAAAQAAAAQKAAAAVXBkYXRlV2ViAAEAAAACAAAADAAAAAQAETUAAAAGAUAAQUEAAB2BAAFGgUAAh8FAAp0BgABdgQAAjAHBAgFCAQBBggEAnUEAAhsAAAAXwAOAjMHBAgECAgBAAgABgUICAMACgAEBgwIARsNCAEcDwwaAA4AAwUMDAAGEAwBdgwACgcMDABaCAwSdQYABF4ADgIzBwQIBAgQAQAIAAYFCAgDAAoABAYMCAEbDQgBHA8MGgAOAAMFDAwABhAMAXYMAAoHDAwAWggMEnUGAAYwBxQIBQgUAnQGBAQgAgokIwAGJCICBiIyBxQKdQQABHwCAABcAAAAECAAAAHJlcXVpcmUABAcAAABzb2NrZXQABAcAAABhc3NlcnQABAQAAAB0Y3AABAgAAABjb25uZWN0AAQQAAAAYm9sLXRyYWNrZXIuY29tAAMAAAAAAABUQAQFAAAAc2VuZAAEGAAAAEdFVCAvcmVzdC9uZXdwbGF5ZXI/aWQ9AAQHAAAAJmh3aWQ9AAQNAAAAJnNjcmlwdE5hbWU9AAQHAAAAc3RyaW5nAAQFAAAAZ3N1YgAEDQAAAFteMC05QS1aYS16XQAEAQAAAAAEJQAAACBIVFRQLzEuMA0KSG9zdDogYm9sLXRyYWNrZXIuY29tDQoNCgAEGwAAAEdFVCAvcmVzdC9kZWxldGVwbGF5ZXI/aWQ9AAQCAAAAcwAEBwAAAHN0YXR1cwAECAAAAHBhcnRpYWwABAgAAAByZWNlaXZlAAQDAAAAKmEABAYAAABjbG9zZQAAAAAAAQAAAAAAEAAAAEBvYmZ1c2NhdGVkLmx1YQA1AAAAAgAAAAIAAAACAAAAAgAAAAIAAAACAAAAAgAAAAMAAAADAAAAAwAAAAMAAAAEAAAABAAAAAUAAAAFAAAABQAAAAYAAAAGAAAABwAAAAcAAAAHAAAABwAAAAcAAAAHAAAABwAAAAgAAAAHAAAABQAAAAgAAAAJAAAACQAAAAkAAAAKAAAACgAAAAsAAAALAAAACwAAAAsAAAALAAAACwAAAAsAAAAMAAAACwAAAAkAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAGAAAAAgAAAGEAAAAAADUAAAACAAAAYgAAAAAANQAAAAIAAABjAAAAAAA1AAAAAgAAAGQAAAAAADUAAAADAAAAX2EAAwAAADUAAAADAAAAYWEABwAAADUAAAABAAAABQAAAF9FTlYAAQAAAAEAEAAAAEBvYmZ1c2NhdGVkLmx1YQADAAAADAAAAAIAAAAMAAAAAAAAAAEAAAAFAAAAX0VOVgA="), nil, "bt", _ENV))()
 
+
+--|Menu|--
 function setupMenu()
 	
 	Menu = scriptConfig("CasanovaZhao", "CasanovaZhao")
@@ -84,6 +98,8 @@ function OnLoad()
 	ts.name = "XinZhao"
 	Menu:addTS(ts)
   UpdateWeb(true, ScriptName, id, HWID)
+	print("<font color='#FF8000'>Casanova </font><font color='#FF8000'>Zhao</font><font color='#FF0000'> v" .. version .."</font>")
+	--}
 end
 
 function OnBugsplat()
