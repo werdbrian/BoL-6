@@ -72,10 +72,6 @@ function setupMenu()
 	Menu.ISettings:addParam("SOTD", "Use Sword of the Divine", SCRIPT_PARAM_ONOFF, true)
 	Menu.ISettings:addParam("YGB", "Use Yomuu's Ghost Blade", SCRIPT_PARAM_ONOFF, true)
 
-	
-	--Menu:addSubMenu("Killsteal settings", "killsteal")
-	--Menu.killsteal:addParam("ksE", "Killsteal with E", SCRIPT_PARAM_ONOFF, true)
-	
 	Menu:addSubMenu("Drawings", "Draw")
 	Menu.Draw:addParam("DrawE", "Draw E", SCRIPT_PARAM_ONOFF, true)
 	Menu.Draw:addParam("DrawR", "Draw R", SCRIPT_PARAM_ONOFF, true)
