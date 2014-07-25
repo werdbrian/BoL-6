@@ -80,7 +80,6 @@ function setupMenu()
 	Menu.Script:permaShow("Author")
 	Menu.combo:permaShow("active")
 	Menu.combo:permaShow("useIgnite")
-	Menu.combo:permaShow("IuseC")
 end
 
 local ignite, igniteReady = nil, nil
