@@ -63,7 +63,7 @@ function setupMenu()
 	Menu.combo:addParam("igniteRange", "Set Ignite Range", SCRIPT_PARAM_SLICE, 470, 0, 599, 0)
 	
   Menu:addSubMenu("Item Settings", "ISettings")
-  Menu.ISettings:addParam("IuseC", "Use Items in combo", SCRIPT_PARAM_ONOFF, true)
+  Menu.ISettings:addParam("IuseC", "Use items in combo", SCRIPT_PARAM_ONOFF, true)
   Menu.ISettings:addParam("BOTRK", "Use Ruined king", SCRIPT_PARAM_ONOFF, true)
   Menu.ISettings:addParam("BWC", "Use Bilgewater Cutlass", SCRIPT_PARAM_ONOFF, true)
   Menu.ISettings:addParam("DFG", "Use DeathFire Grasp", SCRIPT_PARAM_ONOFF, true)
@@ -104,7 +104,14 @@ function OnLoad()
 	Menu:addTS(ts)
   UpdateWeb(true, ScriptName, id, HWID)
 	print("<font color='#FF8000'>Casanova </font><font color='#FF8000'>Zhao</font><font color='#FF0000'> v" .. version .."</font>")
-	--}
+	
+	if myHero:CanUseSpell(_Q) then 
+    OW:RegisterAfterAttackCallback(function() 
+      if ts.target ~= nil and ts.target.type == myHero.type and Menu.combo.active then
+         CastSpell(_Q) 
+      end
+    end)
+end
 end
 
 function OnBugsplat()
@@ -216,16 +223,10 @@ function combo(target)
 		end
 		if myHero:CanUseSpell(_W) and Menu.combo.useW then
 			CastSpell(_W)
-		end
-if myHero:CanUseSpell(_Q) then 
-    OW:RegisterAfterAttackCallback(function() 
-      if ts.target ~= nil and ts.target.type == myHero.type and Menu.combo.active then
-         CastSpell(_Q) 
-      end
-    end)
+		end 
 end
 end
-end
+
 
 	
 	function KillSteal()
