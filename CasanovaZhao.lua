@@ -79,8 +79,7 @@ local VP = nil
 local menu = nil
 local target = nil
 local QReady,WReady,EReady,RReady = nil,nil,nil,nil
-local ignite, igniteReady = nil, false
-	
+
 
 function OnLoad()
   Variables()
