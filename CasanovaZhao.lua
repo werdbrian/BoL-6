@@ -63,7 +63,7 @@ function setupMenu()
 	Menu.combo:addParam("igniteRange", "Set Ignite Range", SCRIPT_PARAM_SLICE, 470, 0, 599, 0)
 	
   Menu:addSubMenu("Item Settings", "ISettings")
-  Menu.ISettings:addParam("IuseC", "Use items in combo", SCRIPT_PARAM_ONOFF, true)
+  Menu.ISettings:addParam("IuseC", "Use Items in combo", SCRIPT_PARAM_ONOFF, true)
   Menu.ISettings:addParam("BOTRK", "Use Ruined king", SCRIPT_PARAM_ONOFF, true)
   Menu.ISettings:addParam("BWC", "Use Bilgewater Cutlass", SCRIPT_PARAM_ONOFF, true)
   Menu.ISettings:addParam("DFG", "Use DeathFire Grasp", SCRIPT_PARAM_ONOFF, true)
