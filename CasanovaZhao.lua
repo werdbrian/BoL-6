@@ -1,5 +1,6 @@
 --____________________________________________________________--
 -- CasanovaZhao Changelog                                     --
+-- 0.99 - AA -> Q Fixed, Items Support added                  --
 -- 0.89 - AA -> Q Disable (Need to fix it)                    --
 -- 0.79 - Auto Ignite Added with Set Range (Prevent overkill) --
 -- 0.69 - Initial Release                                     --
@@ -9,7 +10,7 @@ if myHero.charName ~= "XinZhao" then return end
 
 --|Auto Updater|--
 local AUTOUPDATE = true
-local version = 0.89
+local version = 0.99
 local SCRIPT_NAME = "CasanovaZhao"
 local SOURCELIB_URL = "https://raw.github.com/TheRealSource/public/master/common/SourceLib.lua"
 local SOURCELIB_PATH = LIB_PATH.."SourceLib.lua"
@@ -60,6 +61,20 @@ function setupMenu()
 	Menu.combo:addParam("useR", "Use R", SCRIPT_PARAM_ONOFF, true)
 	Menu.combo:addParam("useIgnite", "Use Ignite if Killable", SCRIPT_PARAM_ONOFF, true)
 	Menu.combo:addParam("igniteRange", "Set Ignite Range", SCRIPT_PARAM_SLICE, 470, 0, 599, 0)
+	
+  Menu:addSubMenu("Item Settings", "ISettings")
+  Menu.ISettings:addParam("IuseC", "Use items in combo", SCRIPT_PARAM_ONOFF, true)
+  Menu.ISettings:addParam("BOTRK", "Use Ruined king", SCRIPT_PARAM_ONOFF, true)
+  Menu.ISettings:addParam("BWC", "Use Bilgewater Cutlass", SCRIPT_PARAM_ONOFF, true)
+  Menu.ISettings:addParam("DFG", "Use DeathFire Grasp", SCRIPT_PARAM_ONOFF, true)
+	Menu.ISettings:addParam("HEX", "Use Hextech Revolver", SCRIPT_PARAM_ONOFF, true)
+	Menu.ISettings:addParam("FQC", "Use Frost Queen's Claim", SCRIPT_PARAM_ONOFF, true)
+	Menu.ISettings:addParam("SOTD", "Use Sword of the Divine", SCRIPT_PARAM_ONOFF, true)
+	Menu.ISettings:addParam("YGB", "Use Yomuu's Ghost Blade", SCRIPT_PARAM_ONOFF, true)
+
+	
+	Menu:addSubMenu("Killsteal settings", "killsteal")
+	Menu.killsteal:addParam("ksE", "Killsteal with E", SCRIPT_PARAM_ONOFF, true)
 	
 	Menu:addSubMenu("Drawings", "Draw")
 	Menu.Draw:addParam("DrawE", "Draw E", SCRIPT_PARAM_ONOFF, true)
@@ -112,11 +127,13 @@ function Variables()
 end
 		
 function OnTick()
-		target = ts.target
+		Target = GetTarget()
+		OW:ForceTarget(Target)
 		ts:update()
 		Checks()
 		if Menu.combo.active then combo() end
 		KillSteal()
+		checkItems()
 		end
 		
 		function PassiveActive(Target)
@@ -136,9 +153,65 @@ function OnTick()
 	startUp = false;
 end
 
+function checkItems()
+	HexTech = GetInventorySlotItem(3146)
+	HexTechR = (HexTech ~= nil and myHero:CanUseSpell(HexTech))
+	BilgeWaterCutlass = GetInventorySlotItem(3144)
+    BilgeWaterCutlassR = (BilgeWaterCutlass ~= nil and myHero:CanUseSpell(BilgeWaterCutlass))
+	DFG = GetInventorySlotItem(3128)
+	DFGR = (DFG ~= nil and myHero:CanUseSpell(DFG) == READY)
+	FQC = GetInventorySlotItem(3092)
+	FQCR = (FQC ~= nil and myHero:CanUseSpell(FQC) == READY)
+	YGB = GetInventorySlotItem(3142)
+	YGBR = (YGB ~= nil and myHero:CanUseSpell(YGB) == READY)
+	BotRK = GetInventorySlotItem(3153)
+	BotRKR = (BotRK ~= nil and myHero:CanUseSpell(BotRK) == READY)
+	SotD = GetInventorySlotItem(3131)
+	SotDR = (SotD ~= nil and myHero:CanUseSpell(YGB) == READY)
+	
+	function getTrange()
+	return myHero.range + 150
+end
+end
+
+function GetTarget()
+
+ts:update()
+
+ if ts.target and not ts.target.dead and ts.target.type  == myHero.type then
+
+    return ts.target
+
+    end
+
+end
+
 --|Combo|--
-function combo()
+function combo(target)
 	if ts.target ~= nil then
+	if Menu.ISettings.IuseC then
+		if Menu.ISettings.BOTRK and BotRKR and GetDistance(Target, myHero) < 450 then
+			CastSpell(BotRK, Target)
+		end
+		if Menu.ISettings.DFG and DFGR and GetDistance(Target, myHero) < 500 then
+			CastSpell(DFG, Target)
+		end
+		if Menu.ISettings.HEX and HexTechR and GetDistance(Target, myHero) < 500 then
+			CastSpell(HexTech, Target)
+		end
+		if Menu.ISettings.FQC and FQCR and GetDistance(Target, myHero) < 850 then
+			CastSpell(FQC, Target)
+		end
+		if Menu.ISettings.YGB and YGBR and GetDistance(Target, myHero) < getTrange() then
+			CastSpell(YGB)
+		end
+		if Menu.ISettings.SOTD and SotDR and GetDistance(Target, myHero) < getTrange() then
+			CastSpell(SotD)
+		end
+		if Menu.ISettings.BWC and BilgeWaterCutlassR and GetDistance(Target, myHero) < 500 then
+			CastSpell(BilgeWaterCutlass)
+		end
+	end
 		if myHero:CanUseSpell(_E) == READY and GetDistance(ts.target) <= 600 then
 			CastSpell(_E, ts.target)
 		end
@@ -148,17 +221,24 @@ function combo()
 		if myHero:CanUseSpell(_W) and Menu.combo.useW then
 			CastSpell(_W)
 		end
-		if myHero:CanUseSpell(_Q) then 
-		  CastSpell(_Q)
-			 end
-		  end
-     end
+if myHero:CanUseSpell(_Q) then 
+    OW:RegisterAfterAttackCallback(function() 
+      if ts.target ~= nil and ts.target.type == myHero.type and Menu.combo.active then
+         CastSpell(_Q) 
+      end
+    end)
+end
+end
+end
+
 	
 	function KillSteal()
 	if Menu.combo.useIgnite then
 		useIgnite()
 	end
 end
+
+
 
 function useIgnite()
 	if igniteReady then
