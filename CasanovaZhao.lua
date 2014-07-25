@@ -1,5 +1,6 @@
 --____________________________________________________________--
 -- CasanovaZhao Changelog                                     --
+-- 0.89 - AA -> Q Disable (Need to fix it)                    --
 -- 0.79 - Auto Ignite Added with Set Range (Prevent overkill) --
 -- 0.69 - Initial Release                                     --
 --____________________________________________________________--
@@ -8,7 +9,7 @@ if myHero.charName ~= "XinZhao" then return end
 
 --|Auto Updater|--
 local AUTOUPDATE = true
-local version = 0.79
+local version = 0.89
 local SCRIPT_NAME = "CasanovaZhao"
 local SOURCELIB_URL = "https://raw.github.com/TheRealSource/public/master/common/SourceLib.lua"
 local SOURCELIB_PATH = LIB_PATH.."SourceLib.lua"
@@ -147,10 +148,11 @@ function combo()
 		if myHero:CanUseSpell(_W) and Menu.combo.useW then
 			CastSpell(_W)
 		end
-		if myHero:CanUseSpell(_Q) then OW:RegisterAfterAttackCallback(function() CastSpell(_Q) end)
+		if myHero:CanUseSpell(_Q) then 
+		  CastSpell(_Q)
+			 end
 		  end
-		end			
-	end
+     end
 	
 	function KillSteal()
 	if Menu.combo.useIgnite then
