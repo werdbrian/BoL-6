@@ -1,11 +1,14 @@
--- CasanovaZhao, enjoy
+--____________________________________________________________--
+-- CasanovaZhao Changelog                                     --
+-- 0.79 - Auto Ignite Added with Set Range (Prevent overkill) --
+-- 0.69 - Initial Release                                     --
+--____________________________________________________________--
 
 if myHero.charName ~= "XinZhao" then return end
 
 --|Auto Updater|--
-
 local AUTOUPDATE = true
-local version = 0.69
+local version = 0.79
 local SCRIPT_NAME = "CasanovaZhao"
 local SOURCELIB_URL = "https://raw.github.com/TheRealSource/public/master/common/SourceLib.lua"
 local SOURCELIB_PATH = LIB_PATH.."SourceLib.lua"
@@ -54,6 +57,8 @@ function setupMenu()
 	Menu.combo:addParam("sep", "", SCRIPT_PARAM_INFO, "")
 	Menu.combo:addParam("useW", "Use W", SCRIPT_PARAM_ONOFF, true)
 	Menu.combo:addParam("useR", "Use R", SCRIPT_PARAM_ONOFF, true)
+	Menu.combo:addParam("useIgnite", "Use Ignite if Killable", SCRIPT_PARAM_ONOFF, true)
+	Menu.combo:addParam("igniteRange", "Set Ignite Range", SCRIPT_PARAM_SLICE, 470, 0, 599, 0)
 	
 	Menu:addSubMenu("Drawings", "Draw")
 	Menu.Draw:addParam("DrawE", "Draw E", SCRIPT_PARAM_ONOFF, true)
@@ -62,10 +67,11 @@ function setupMenu()
 	
 	Menu.Script:permaShow("Author")
 	Menu.combo:permaShow("active")
+	Menu.combo:permaShow("useIgnite")
 	
 end
 
-
+local ignite, igniteReady = nil, nil
 local SpellAA = {Range = 175 + 75}
 local SpellE = {Range = 650}
 local SpellR = {Range = 500}
@@ -110,6 +116,7 @@ function OnTick()
 		ts:update()
 		Checks()
 		if Menu.combo.active then combo() end
+		KillSteal()
 		end
 		
 		function PassiveActive(Target)
@@ -128,7 +135,8 @@ function OnTick()
 	-- This is a var where I stop executing what is in my OnTick()
 	startUp = false;
 end
-		
+
+--|Combo|--
 function combo()
 	if ts.target ~= nil then
 		if myHero:CanUseSpell(_E) == READY and GetDistance(ts.target) <= 600 then
@@ -144,17 +152,49 @@ function combo()
 		  end
 		end			
 	end
-
-
-function Checks()
 	
+	function KillSteal()
+	if Menu.combo.useIgnite then
+		useIgnite()
+	end
+end
+
+function useIgnite()
+	if igniteReady then
+		local Enemies = GetEnemyHeroes()
+		for i, val in ipairs(Enemies) do
+			if ValidTarget(val, 600) then
+				if getDmg("IGNITE", val, myHero) > val.health and GetDistance(val) >= Menu.combo.igniteRange then
+					CastSpell(ignite, val)
+				end
+			end
+		end
+	end
+end
+
+function HealthCheck(unit, HealthValue)
+	if unit.health > (unit.maxHealth * (HealthValue/100)) then 
+		return true
+	else
+		return false
+	end
+end
+
+--|CD Checks|--
+function Checks()
 	QReady = (myHero:CanUseSpell(_Q) == READY)
 	WReady = (myHero:CanUseSpell(_W) == READY)
 	EReady = (myHero:CanUseSpell(_E) == READY)
 	RReady = (myHero:CanUseSpell(_R) == READY)
-	
+	if myHero:GetSpellData(SUMMONER_1).name:find("SummonerDot") then
+		ignite = SUMMONER_1
+	elseif myHero:GetSpellData(SUMMONER_2).name:find("SummonerDot") then
+		ignite = SUMMONER_2
+	end
+	igniteReady = (ignite ~= nil and myHero:CanUseSpell(ignite) == READY)
 end
 
+--|Spell Ranges|--
 function OnDraw()
 		if not myHero.dead then
 				if Menu.Draw.DrawAA then
