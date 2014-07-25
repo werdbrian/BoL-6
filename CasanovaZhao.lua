@@ -73,8 +73,8 @@ function setupMenu()
 	Menu.ISettings:addParam("YGB", "Use Yomuu's Ghost Blade", SCRIPT_PARAM_ONOFF, true)
 
 	
-	Menu:addSubMenu("Killsteal settings", "killsteal")
-	Menu.killsteal:addParam("ksE", "Killsteal with E", SCRIPT_PARAM_ONOFF, true)
+	--Menu:addSubMenu("Killsteal settings", "killsteal")
+	--Menu.killsteal:addParam("ksE", "Killsteal with E", SCRIPT_PARAM_ONOFF, true)
 	
 	Menu:addSubMenu("Drawings", "Draw")
 	Menu.Draw:addParam("DrawE", "Draw E", SCRIPT_PARAM_ONOFF, true)
@@ -84,7 +84,7 @@ function setupMenu()
 	Menu.Script:permaShow("Author")
 	Menu.combo:permaShow("active")
 	Menu.combo:permaShow("useIgnite")
-	
+	Menu.combo:permaShow("IuseC")
 end
 
 local ignite, igniteReady = nil, nil
