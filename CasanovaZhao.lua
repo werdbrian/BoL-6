@@ -1,6 +1,6 @@
 --____________________________________________________________--
 -- CasanovaZhao Changelog                                     --
--- 1.29 - Smart E added                                       --
+-- 1.39 - Smart E added                                       --
 -- 1.29 - Harras added                                        --
 -- 1.19 - Auto Leveling added                                 --
 -- 1.09 - Hydra and Tiamat Support added                      --
@@ -14,7 +14,7 @@ if myHero.charName ~= "XinZhao" then return end
 
 --|Auto Updater|--
 local AUTOUPDATE = true
-local version = 1.29
+local version = 1.39
 local SCRIPT_NAME = "CasanovaZhao"
 local SOURCELIB_URL = "https://raw.github.com/TheRealSource/public/master/common/SourceLib.lua"
 local SOURCELIB_PATH = LIB_PATH.."SourceLib.lua"
