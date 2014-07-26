@@ -1,5 +1,6 @@
 --____________________________________________________________--
 -- CasanovaZhao Changelog                                     --
+-- 1.29 - Harras added                                        --
 -- 1.19 - Auto Leveling added                                 --
 -- 1.09 - Hydra and Tiamat Support added                      --
 -- 0.99 - AA -> Q Fixed, Items Support added                  --
@@ -12,7 +13,7 @@ if myHero.charName ~= "XinZhao" then return end
 
 --|Auto Updater|--
 local AUTOUPDATE = true
-local version = 1.19
+local version = 1.29
 local SCRIPT_NAME = "CasanovaZhao"
 local SOURCELIB_URL = "https://raw.github.com/TheRealSource/public/master/common/SourceLib.lua"
 local SOURCELIB_PATH = LIB_PATH.."SourceLib.lua"
@@ -61,20 +62,37 @@ function setupMenu()
 	Menu.combo:addParam("sep", "", SCRIPT_PARAM_INFO, "")
 	Menu.combo:addParam("useW", "Use W", SCRIPT_PARAM_ONOFF, true)
 	Menu.combo:addParam("useR", "Use R", SCRIPT_PARAM_ONOFF, true)
-	Menu.combo:addParam("useIgnite", "Use Ignite if Killable", SCRIPT_PARAM_ONOFF, true)
-	Menu.combo:addParam("igniteRange", "Set Ignite Range", SCRIPT_PARAM_SLICE, 470, 0, 599, 0)
+	
+	Menu:addSubMenu("Harras", "harras")
+	Menu.harras:addParam("hactive","Harras active",SCRIPT_PARAM_ONKEYDOWN, false, 67)
+	Menu.harras:addParam("sep", "", SCRIPT_PARAM_INFO, "")
+	Menu.harras:addParam("huseQ", "Use Q", SCRIPT_PARAM_ONOFF, true)
+	Menu.harras:addParam("huseW", "Use W", SCRIPT_PARAM_ONOFF, true)
+	Menu.harras:addParam("huseE", "Use E", SCRIPT_PARAM_ONOFF, true)
 	
   Menu:addSubMenu("Item Settings", "ISettings")
-  Menu.ISettings:addParam("IuseC", "Use Items in combo", SCRIPT_PARAM_ONOFF, true)
-  Menu.ISettings:addParam("BOTRK", "Use Ruined king", SCRIPT_PARAM_ONOFF, true)
-	Menu.ISettings:addParam("TIAMAT", "Use Tiamat", SCRIPT_PARAM_ONOFF, true)
-	Menu.ISettings:addParam("HYDRA", "Use Ravenous Hydra", SCRIPT_PARAM_ONOFF, true)
-  Menu.ISettings:addParam("BWC", "Use Bilgewater Cutlass", SCRIPT_PARAM_ONOFF, true)
-  Menu.ISettings:addParam("DFG", "Use DeathFire Grasp", SCRIPT_PARAM_ONOFF, true)
-	Menu.ISettings:addParam("HEX", "Use Hextech Revolver", SCRIPT_PARAM_ONOFF, true)
-	Menu.ISettings:addParam("FQC", "Use Frost Queen's Claim", SCRIPT_PARAM_ONOFF, true)
-	Menu.ISettings:addParam("SOTD", "Use Sword of the Divine", SCRIPT_PARAM_ONOFF, true)
-	Menu.ISettings:addParam("YGB", "Use Yomuu's Ghost Blade", SCRIPT_PARAM_ONOFF, true)
+	Menu.ISettings:addSubMenu("Combo", "CISettings")
+  Menu.ISettings.CISettings:addParam("IuseC", "Use Items in Combo", SCRIPT_PARAM_ONOFF, true)
+  Menu.ISettings.CISettings:addParam("BOTRK", "Use Ruined king", SCRIPT_PARAM_ONOFF, true)
+	Menu.ISettings.CISettings:addParam("TIAMAT", "Use Tiamat", SCRIPT_PARAM_ONOFF, true)
+	Menu.ISettings.CISettings:addParam("HYDRA", "Use Ravenous Hydra", SCRIPT_PARAM_ONOFF, true)
+  Menu.ISettings.CISettings:addParam("BWC", "Use Bilgewater Cutlass", SCRIPT_PARAM_ONOFF, true)
+  Menu.ISettings.CISettings:addParam("DFG", "Use DeathFire Grasp", SCRIPT_PARAM_ONOFF, true)
+	Menu.ISettings.CISettings:addParam("HEX", "Use Hextech Revolver", SCRIPT_PARAM_ONOFF, true)
+	Menu.ISettings.CISettings:addParam("FQC", "Use Frost Queen's Claim", SCRIPT_PARAM_ONOFF, true)
+	Menu.ISettings.CISettings:addParam("SOTD", "Use Sword of the Divine", SCRIPT_PARAM_ONOFF, true)
+	Menu.ISettings.CISettings:addParam("YGB", "Use Yomuu's Ghost Blade", SCRIPT_PARAM_ONOFF, true)
+	Menu.ISettings:addSubMenu("Harras", "HISettings")
+  Menu.ISettings.HISettings:addParam("IuseC", "Use Items in Harras", SCRIPT_PARAM_ONOFF, true)
+  Menu.ISettings.HISettings:addParam("BOTRK", "Use Ruined king", SCRIPT_PARAM_ONOFF, true)
+	Menu.ISettings.HISettings:addParam("TIAMAT", "Use Tiamat", SCRIPT_PARAM_ONOFF, true)
+	Menu.ISettings.HISettings:addParam("HYDRA", "Use Ravenous Hydra", SCRIPT_PARAM_ONOFF, true)
+  Menu.ISettings.HISettings:addParam("BWC", "Use Bilgewater Cutlass", SCRIPT_PARAM_ONOFF, true)
+  Menu.ISettings.HISettings:addParam("DFG", "Use DeathFire Grasp", SCRIPT_PARAM_ONOFF, true)
+	Menu.ISettings.HISettings:addParam("HEX", "Use Hextech Revolver", SCRIPT_PARAM_ONOFF, true)
+	Menu.ISettings.HISettings:addParam("FQC", "Use Frost Queen's Claim", SCRIPT_PARAM_ONOFF, true)
+	Menu.ISettings.HISettings:addParam("SOTD", "Use Sword of the Divine", SCRIPT_PARAM_ONOFF, true)
+	Menu.ISettings.HISettings:addParam("YGB", "Use Yomuu's Ghost Blade", SCRIPT_PARAM_ONOFF, true)
 
 	Menu:addSubMenu("Drawings", "Draw")
 	Menu.Draw:addParam("DrawE", "Draw E", SCRIPT_PARAM_ONOFF, true)
@@ -82,12 +100,15 @@ function setupMenu()
   Menu.Draw:addParam("DrawAA", "Draw AA", SCRIPT_PARAM_ONOFF, true)
 	
 	Menu:addSubMenu("Misc", "Misc")
+	Menu.Misc:addParam("useIgnite", "Use Ignite if Killable", SCRIPT_PARAM_ONOFF, true)
+	Menu.Misc:addParam("igniteRange", "Set Ignite Range", SCRIPT_PARAM_SLICE, 470, 0, 599, 0)
 	Menu.Misc:addParam("Autolevel", "Auto Level", SCRIPT_PARAM_LIST, 1, {"Disable", "Q>E>W", "E>Q>W", "JungleQ>E", "JungleE>Q"})
 	
 	Menu.Script:permaShow("Author")
 	Menu.combo:permaShow("active")
-	Menu.combo:permaShow("useIgnite")
-	Menu.ISettings:permaShow("IuseC")
+	Menu.ISettings.CISettings:permaShow("IuseC")
+	Menu.ISettings.HISettings:permaShow("IuseC")
+	Menu.Misc:permaShow("useIgnite")
 	Menu.Misc:permaShow("Autolevel")
 end
 
@@ -126,6 +147,14 @@ function OnLoad()
       end
     end)
 end
+
+if myHero:CanUseSpell(_Q) then 
+    OW:RegisterAfterAttackCallback(function() 
+      if ts.target ~= nil and ts.target.type == myHero.type and Menu.harras.hactive and Menu.harras.huseQ then
+         CastSpell(_Q) 
+      end
+    end)
+end
 end
 
 function OnBugsplat()
@@ -149,6 +178,7 @@ function OnTick()
 		ts:update()
 		Checks()
 		if Menu.combo.active then combo() end
+		if Menu.harras.hactive then harras() end
 		KillSteal()
 		checkItems()
 		if Menu.Misc.Autolevel == 2 then
@@ -218,36 +248,36 @@ end
 --|Combo|--
 function combo(target)
 	if ts.target ~= nil then
-	if Menu.ISettings.IuseC then
+	if Menu.ISettings.CISettings.IuseC then
 		if Menu.ISettings.BOTRK and BotRKR and GetDistance(Target, myHero) < 450 then
 			CastSpell(BotRK, Target)
 		end
-		if Menu.ISettings.DFG and DFGR and GetDistance(Target, myHero) < 500 then
+		if Menu.ISettings.CISettings.DFG and DFGR and GetDistance(Target, myHero) < 500 then
 			CastSpell(DFG, Target)
 		end
-		if Menu.ISettings.HEX and HexTechR and GetDistance(Target, myHero) < 500 then
+		if Menu.ISettings.CISettings.HEX and HexTechR and GetDistance(Target, myHero) < 500 then
 			CastSpell(HexTech, Target)
 		end
-		if Menu.ISettings.FQC and FQCR and GetDistance(Target, myHero) < 850 then
+		if Menu.ISettings.CISettings.FQC and FQCR and GetDistance(Target, myHero) < 850 then
 			CastSpell(FQC, Target)
 		end
-		if Menu.ISettings.YGB and YGBR and GetDistance(Target, myHero) < getTrange() then
+		if Menu.ISettings.CISettings.YGB and YGBR and GetDistance(Target, myHero) < getTrange() then
 			CastSpell(YGB)
 		end
-		if Menu.ISettings.SOTD and SotDR and GetDistance(Target, myHero) < getTrange() then
+		if Menu.ISettings.CISettings.SOTD and SotDR and GetDistance(Target, myHero) < getTrange() then
 			CastSpell(SotD)
 		end
-		if Menu.ISettings.BWC and BilgeWaterCutlassR and GetDistance(Target, myHero) < 500 then
+		if Menu.ISettings.CISettings.BWC and BilgeWaterCutlassR and GetDistance(Target, myHero) < 500 then
 			CastSpell(BilgeWaterCutlass)
 		end
 	end
 		if myHero:CanUseSpell(_E) == READY and GetDistance(ts.target) <= 600 then
 			CastSpell(_E, ts.target)
 		end
-		if Menu.ISettings.TIAMAT and TIAMATR and GetDistance(Target, myHero) < 250 then
+		if Menu.ISettings.CISettings.TIAMAT and TIAMATR and GetDistance(Target, myHero) < 250 then
 			CastSpell(TIAMAT)
 			else 
-		if Menu.ISettings.HYDRA and HYDRAR and GetDistance(Target, myHero) < 250 then
+		if Menu.ISettings.CISettings.HYDRA and HYDRAR and GetDistance(Target, myHero) < 250 then
 			CastSpell(HYDRA)
 			else
 		if myHero:CanUseSpell(_R) and Menu.combo.useR and PassiveActive(Target) and GetDistance(ts.target) <= 500 then
@@ -261,10 +291,53 @@ end
 end
 end
 
+--|harras|--
+function harras(target)
+	if ts.target ~= nil then
+	if Menu.ISettings.HISettings.IuseC then
+		if Menu.ISettings.HISettings.BOTRK and BotRKR and GetDistance(Target, myHero) < 450 then
+			CastSpell(BotRK, Target)
+		end
+		if Menu.ISettings.HISettings.DFG and DFGR and GetDistance(Target, myHero) < 500 then
+			CastSpell(DFG, Target)
+		end
+		if Menu.ISettings.HISettings.HEX and HexTechR and GetDistance(Target, myHero) < 500 then
+			CastSpell(HexTech, Target)
+		end
+		if Menu.ISettings.HISettings.FQC and FQCR and GetDistance(Target, myHero) < 850 then
+			CastSpell(FQC, Target)
+		end
+		if Menu.ISettings.HISettings.YGB and YGBR and GetDistance(Target, myHero) < getTrange() then
+			CastSpell(YGB)
+		end
+		if Menu.ISettings.HISettings.SOTD and SotDR and GetDistance(Target, myHero) < getTrange() then
+			CastSpell(SotD)
+		end
+		if Menu.ISettings.HISettings.BWC and BilgeWaterCutlassR and GetDistance(Target, myHero) < 500 then
+			CastSpell(BilgeWaterCutlass)
+		end
+	end
+		if myHero:CanUseSpell(_E) == READY and GetDistance(ts.target) <= 600 and Menu.harras.huseE then
+			CastSpell(_E, ts.target)
+		end
+		if Menu.ISettings.HISettings.TIAMAT and TIAMATR and GetDistance(Target, myHero) < 250 then
+			CastSpell(TIAMAT)
+			else 
+		if Menu.ISettings.HISettings.HYDRA and HYDRAR and GetDistance(Target, myHero) < 250 then
+			CastSpell(HYDRA)
+			else
+		if myHero:CanUseSpell(_W) and Menu.harras.huseW then
+			CastSpell(_W)
+		end 
+end
+end
+end
+end
+
 
 	
 	function KillSteal()
-	if Menu.combo.useIgnite then
+	if Menu.Misc.useIgnite then
 		useIgnite()
 	end
 end
@@ -276,7 +349,7 @@ function useIgnite()
 		local Enemies = GetEnemyHeroes()
 		for i, val in ipairs(Enemies) do
 			if ValidTarget(val, 600) then
-				if getDmg("IGNITE", val, myHero) > val.health and GetDistance(val) >= Menu.combo.igniteRange then
+				if getDmg("IGNITE", val, myHero) > val.health and GetDistance(val) >= Menu.Misc.igniteRange then
 					CastSpell(ignite, val)
 				end
 			end
