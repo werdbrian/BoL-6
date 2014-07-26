@@ -1,5 +1,6 @@
 --____________________________________________________________--
 -- CasanovaZhao Changelog                                     --
+-- 1.29 - Smart E added                                       --
 -- 1.29 - Harras added                                        --
 -- 1.19 - Auto Leveling added                                 --
 -- 1.09 - Hydra and Tiamat Support added                      --
@@ -61,6 +62,7 @@ function setupMenu()
 	Menu.combo:addParam("active","Combo active",SCRIPT_PARAM_ONKEYDOWN, false, 32)
 	Menu.combo:addParam("sep", "", SCRIPT_PARAM_INFO, "")
 	Menu.combo:addParam("useW", "Use W", SCRIPT_PARAM_ONOFF, true)
+	Menu.combo:addParam("smartE", "Smart E", SCRIPT_PARAM_ONOFF, true)
 	Menu.combo:addParam("useR", "Use R", SCRIPT_PARAM_ONOFF, true)
 	
 	Menu:addSubMenu("Harras", "harras")
@@ -272,7 +274,9 @@ function combo(target)
 		end
 	end
 		if myHero:CanUseSpell(_E) == READY and GetDistance(ts.target) <= 600 then
+		if Menu.combo.smartE and GetDistance(Target, myHero) > 250 then
 			CastSpell(_E, ts.target)
+		end
 		end
 		if Menu.ISettings.CISettings.TIAMAT and TIAMATR and GetDistance(Target, myHero) < 250 then
 			CastSpell(TIAMAT)
