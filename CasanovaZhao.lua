@@ -1,6 +1,7 @@
 --____________________________________________________________--
 -- CasanovaZhao Changelog                                     --
--- 1.09 - Hydra and Tiamat Support added                  --
+-- 1.19 - Auto Leveling added                                 --
+-- 1.09 - Hydra and Tiamat Support added                      --
 -- 0.99 - AA -> Q Fixed, Items Support added                  --
 -- 0.89 - AA -> Q Disable (Need to fix it)                    --
 -- 0.79 - Auto Ignite Added with Set Range (Prevent overkill) --
@@ -11,7 +12,7 @@ if myHero.charName ~= "XinZhao" then return end
 
 --|Auto Updater|--
 local AUTOUPDATE = true
-local version = 1.09
+local version = 1.19
 local SCRIPT_NAME = "CasanovaZhao"
 local SOURCELIB_URL = "https://raw.github.com/TheRealSource/public/master/common/SourceLib.lua"
 local SOURCELIB_PATH = LIB_PATH.."SourceLib.lua"
@@ -80,10 +81,14 @@ function setupMenu()
 	Menu.Draw:addParam("DrawR", "Draw R", SCRIPT_PARAM_ONOFF, true)
   Menu.Draw:addParam("DrawAA", "Draw AA", SCRIPT_PARAM_ONOFF, true)
 	
+	Menu:addSubMenu("Misc", "Misc")
+	Menu.Misc:addParam("Autolevel", "Auto Level", SCRIPT_PARAM_LIST, 1, {"Disable", "Q>E>W", "E>Q>W", "JungleQ>E", "JungleE>Q"})
+	
 	Menu.Script:permaShow("Author")
 	Menu.combo:permaShow("active")
 	Menu.combo:permaShow("useIgnite")
 	Menu.ISettings:permaShow("IuseC")
+	Menu.Misc:permaShow("Autolevel")
 end
 
 local ignite, igniteReady = nil, nil
@@ -94,6 +99,12 @@ local VP = nil
 local menu = nil
 local target = nil
 local QReady,WReady,EReady,RReady = nil,nil,nil,nil
+levelSequence = {
+        QE = {1,3,1,2,1,4,1,3,1,3,4,3,3,2,2,4,2,2},
+        EQ = {3,1,3,2,3,4,3,1,3,1,4,1,1,2,2,4,2,2}, 
+  JungleQE = {2,1,3,1,1,4,1,3,1,3,4,3,3,2,2,4,2,2},
+	JungleEQ = {2,1,3,3,3,4,3,1,3,1,4,1,1,2,2,4,2,2},
+}
 
 
 function OnLoad()
@@ -140,6 +151,14 @@ function OnTick()
 		if Menu.combo.active then combo() end
 		KillSteal()
 		checkItems()
+		if Menu.Misc.Autolevel == 2 then
+    autoLevelSetSequence(levelSequence.QE)
+    elseif Menu.Misc.Autolevel == 3 then
+    autoLevelSetSequence(levelSequence.EQ)
+		elseif Menu.Misc.Autolevel == 4 then
+    autoLevelSetSequence(levelSequence.JungleQE) 
+		elseif Menu.Misc.Autolevel == 5 then
+    autoLevelSetSequence(levelSequence.JungleEQ) end
 		end
 		
 		function PassiveActive(Target)
