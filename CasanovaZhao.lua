@@ -1,5 +1,6 @@
 --____________________________________________________________--
 -- CasanovaZhao Changelog                                     --
+-- 1.09 - Hydra and Tiamat Support added                  --
 -- 0.99 - AA -> Q Fixed, Items Support added                  --
 -- 0.89 - AA -> Q Disable (Need to fix it)                    --
 -- 0.79 - Auto Ignite Added with Set Range (Prevent overkill) --
@@ -10,7 +11,7 @@ if myHero.charName ~= "XinZhao" then return end
 
 --|Auto Updater|--
 local AUTOUPDATE = true
-local version = 0.99
+local version = 1.09
 local SCRIPT_NAME = "CasanovaZhao"
 local SOURCELIB_URL = "https://raw.github.com/TheRealSource/public/master/common/SourceLib.lua"
 local SOURCELIB_PATH = LIB_PATH.."SourceLib.lua"
@@ -63,8 +64,10 @@ function setupMenu()
 	Menu.combo:addParam("igniteRange", "Set Ignite Range", SCRIPT_PARAM_SLICE, 470, 0, 599, 0)
 	
   Menu:addSubMenu("Item Settings", "ISettings")
-  Menu.ISettings:addParam("IuseC", "Use items in combo", SCRIPT_PARAM_ONOFF, true)
+  Menu.ISettings:addParam("IuseC", "Use Items in combo", SCRIPT_PARAM_ONOFF, true)
   Menu.ISettings:addParam("BOTRK", "Use Ruined king", SCRIPT_PARAM_ONOFF, true)
+	Menu.ISettings:addParam("TIAMAT", "Use Tiamat", SCRIPT_PARAM_ONOFF, true)
+	Menu.ISettings:addParam("HYDRA", "Use Ravenous Hydra", SCRIPT_PARAM_ONOFF, true)
   Menu.ISettings:addParam("BWC", "Use Bilgewater Cutlass", SCRIPT_PARAM_ONOFF, true)
   Menu.ISettings:addParam("DFG", "Use DeathFire Grasp", SCRIPT_PARAM_ONOFF, true)
 	Menu.ISettings:addParam("HEX", "Use Hextech Revolver", SCRIPT_PARAM_ONOFF, true)
@@ -171,6 +174,10 @@ function checkItems()
 	BotRKR = (BotRK ~= nil and myHero:CanUseSpell(BotRK) == READY)
 	SotD = GetInventorySlotItem(3131)
 	SotDR = (SotD ~= nil and myHero:CanUseSpell(YGB) == READY)
+	TIAMAT = GetInventorySlotItem(3077)
+	TIAMATR = (TIAMAT ~= nil and myHero:CanUseSpell(TIAMAT) == READY)
+	HYDRA = GetInventorySlotItem(3074)
+	HYDRAR = (HYDRA ~= nil and myHero:CanUseSpell(HYDRA) == READY)
 	
 	function getTrange()
 	return myHero.range + 150
@@ -218,12 +225,20 @@ function combo(target)
 		if myHero:CanUseSpell(_E) == READY and GetDistance(ts.target) <= 600 then
 			CastSpell(_E, ts.target)
 		end
+		if Menu.ISettings.TIAMAT and TIAMATR and GetDistance(Target, myHero) < 250 then
+			CastSpell(TIAMAT)
+			else 
+		if Menu.ISettings.HYDRA and HYDRAR and GetDistance(Target, myHero) < 250 then
+			CastSpell(HYDRA)
+			else
 		if myHero:CanUseSpell(_R) and Menu.combo.useR and PassiveActive(Target) and GetDistance(ts.target) <= 500 then
 			CastSpell(_R)
 		end
 		if myHero:CanUseSpell(_W) and Menu.combo.useW then
 			CastSpell(_W)
 		end 
+end
+end
 end
 end
 
