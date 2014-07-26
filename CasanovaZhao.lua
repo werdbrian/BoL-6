@@ -64,7 +64,7 @@ function setupMenu()
 	Menu.combo:addParam("useR", "Use R", SCRIPT_PARAM_ONOFF, true)
 	
 	Menu:addSubMenu("Harras", "harras")
-	Menu.harras:addParam("hactive","Harras active",SCRIPT_PARAM_ONKEYDOWN, false, 67)
+	Menu.harras:addParam("hactive","Harras active",SCRIPT_PARAM_ONKEYDOWN, false, 84)
 	Menu.harras:addParam("sep", "", SCRIPT_PARAM_INFO, "")
 	Menu.harras:addParam("huseQ", "Use Q", SCRIPT_PARAM_ONOFF, true)
 	Menu.harras:addParam("huseW", "Use W", SCRIPT_PARAM_ONOFF, true)
