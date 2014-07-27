@@ -274,8 +274,11 @@ function combo(target)
 		end
 	end
 		if myHero:CanUseSpell(_E) == READY and GetDistance(ts.target) <= 600 then
-		if Menu.combo.smartE and GetDistance(Target, myHero) > 250 then
+		if not Menu.combo.smartE then
 			CastSpell(_E, ts.target)
+			else if Menu.combo.smartE and GetDistance(Target, myHero) > 250 then
+			CastSpell(_E, ts.target)
+			end
 		end
 		end
 		if Menu.ISettings.CISettings.TIAMAT and TIAMATR and GetDistance(Target, myHero) < 250 then
