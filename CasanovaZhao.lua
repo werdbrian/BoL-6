@@ -142,18 +142,11 @@ function OnLoad()
   UpdateWeb(true, ScriptName, id, HWID)
 	print("<font color='#FF8000'>Casanova </font><font color='#FF8000'>Zhao</font><font color='#FF0000'> v" .. version .."</font>")
 	
-	if myHero:CanUseSpell(_Q) then 
     OW:RegisterAfterAttackCallback(function() 
-      if ts.target ~= nil and ts.target.type == myHero.type and Menu.combo.active then
-         CastSpell(_Q) 
-      end
-    end)
-end
-
-if myHero:CanUseSpell(_Q) then 
-    OW:RegisterAfterAttackCallback(function() 
-      if ts.target ~= nil and ts.target.type == myHero.type and Menu.harras.hactive and Menu.harras.huseQ then
-         CastSpell(_Q) 
+      if ts.target ~= nil and ts.target.type == myHero.type and (Menu.combo.active or (Menu.harras.hactive and Menu.harras.huseQ)) then
+         if myHero:CanUseSpell(_Q) then
+              CastSpell(_Q) 
+         end
       end
     end)
 end
