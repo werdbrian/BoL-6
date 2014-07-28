@@ -150,7 +150,6 @@ function OnLoad()
       end
     end)
 end
-end
 
 function OnBugsplat()
 	UpdateWeb(false, ScriptName, id, HWID)
